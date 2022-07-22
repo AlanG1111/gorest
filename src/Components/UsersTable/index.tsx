@@ -42,6 +42,7 @@ const UsersTable: React.FC = () => {
       setRows(data);
       setPageQty(selectedByGender().length || data.length);
     });
+    /* eslint-disable-next-line */
   }, [gender]);
 
   const selectedByGender = () => {

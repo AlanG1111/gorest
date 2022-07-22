@@ -40,6 +40,7 @@ const UserEditPage: React.FC = () => {
         setUser(data);
       });
     }
+    /* eslint-disable-next-line */
   }, []);
 
   const handleChangeInput =
