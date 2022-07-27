@@ -1,8 +1,5 @@
 import IUserData from "../types";
 
-const accessToken =
-  "Bearer ef7a8354d58822419f5ed2b4dffd1ec5ef730ffa0c3913b804096e5069db360e";
-
 // Return all users from API
 export const getAllUsers = async function () {
   const response = await fetch("https://gorest.co.in/public/v2/users");
@@ -16,7 +13,7 @@ export const getOneUser = async function (id: string) {
 };
 
 // Put changed user`s data to API
-export const putUser = async (user: IUserData) => {
+export const putUser = async (user: IUserData, token: string) => {
   const url = `https://gorest.co.in/public/v2/users/${user.id}`;
   const body = JSON.stringify(user);
   const settings = {
@@ -24,7 +21,7 @@ export const putUser = async (user: IUserData) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: accessToken,
+      Authorization: `Bearer ${token}`,
     },
     body,
   };

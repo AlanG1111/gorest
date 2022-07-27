@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -24,10 +24,12 @@ import TableHeader from "../TableHeader";
 import IUserData from "../../types";
 
 import "react-toastify/dist/ReactToastify.css";
+import { TokenContext } from "../..";
 
 const UserEditPage: React.FC = () => {
   const [user, setUser] = useState<IUserData | undefined>();
   const [isLoading, setLoading] = useState<boolean>();
+  const { token } = useContext(TokenContext);
 
   let { id } = useParams<{ id?: string | undefined }>();
   const navTo = useNavigate();
@@ -66,8 +68,8 @@ const UserEditPage: React.FC = () => {
     };
 
   const changeUserHandler = () => {
-    if (user) {
-      putUser(user)
+    if (user && token) {
+      putUser(user, token)
         .then((data) => {
           if (!data.ok) {
             toast.error(`${data.message}`);
