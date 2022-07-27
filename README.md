@@ -18,4 +18,4 @@ You will also see any lint errors in the console.
 
 React, React-router-dom, MaterialUI, React-toastify, TypeScript, RestAPI
 
-[https://62dadcd63a0bcd1a7d44f027--tangerine-panda-85576f.netlify.app/](https://62dadcd63a0bcd1a7d44f027--tangerine-panda-85576f.netlify.app/)
+[https://62e1602433a014473887f71b--tangerine-panda-85576f.netlify.app/](https://62e1602433a014473887f71b--tangerine-panda-85576f.netlify.app/)
