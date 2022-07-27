@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { getOneUser, putUser } from "../../api/users";
+import { TokenContext } from "../..";
 
 import {
   Box,
@@ -24,7 +25,6 @@ import TableHeader from "../TableHeader";
 import IUserData from "../../types";
 
 import "react-toastify/dist/ReactToastify.css";
-import { TokenContext } from "../..";
 
 const UserEditPage: React.FC = () => {
   const [user, setUser] = useState<IUserData | undefined>();
@@ -68,6 +68,10 @@ const UserEditPage: React.FC = () => {
     };
 
   const changeUserHandler = () => {
+    console.log(token);
+    if (!token) {
+      toast.error("Go home and add token!");
+    }
     if (user && token) {
       putUser(user, token)
         .then((data) => {

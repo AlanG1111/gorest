@@ -4,7 +4,6 @@ import { getAllUsers } from "../../api/users";
 
 import {
   Grid,
-  TablePagination,
   Paper,
   TableRow,
   TableContainer,
@@ -13,6 +12,7 @@ import {
   Table,
   Box,
   CircularProgress,
+  Pagination,
 } from "@mui/material";
 import GenderSelect from "../GenderSelect";
 import TableHeader from "../TableHeader";
@@ -21,15 +21,12 @@ import IUserData from "../../types";
 
 const UsersTable: React.FC = () => {
   const DEFAULT_PAGE_INDEX = 0;
-  const DEFAULT_ROWS_INDEX = 2;
-  const MAX_ROWS_INDEX = 10;
+  const DEFAULT_ROWS_INDEX = 4;
   const DEFAULT_GENDER = "All";
-  const ROWS_SELECT_PAGINATION = [2, 5, 10];
 
   const [rows, setRows] = useState<Array<IUserData>>([]);
   const [pageQty, setPageQty] = useState<number>(DEFAULT_PAGE_INDEX);
   const [page, setPage] = useState<number>(DEFAULT_PAGE_INDEX);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(DEFAULT_ROWS_INDEX);
   const [gender, setGender] = useState<string>(DEFAULT_GENDER);
   const [isLoading, setLoading] = useState<boolean>();
 
@@ -40,7 +37,10 @@ const UsersTable: React.FC = () => {
     getAllUsers().then((data: Array<IUserData>) => {
       setLoading(false);
       setRows(data);
-      setPageQty(selectedByGender().length || data.length);
+      setPageQty(
+        Math.ceil(selectedByGender().length / DEFAULT_ROWS_INDEX) ||
+          Math.ceil(data.length / DEFAULT_ROWS_INDEX)
+      );
     });
     /* eslint-disable-next-line */
   }, [gender]);
@@ -55,14 +55,7 @@ const UsersTable: React.FC = () => {
   };
 
   const handleChangePage = (_: any, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(parseInt(event.target.value, MAX_ROWS_INDEX));
-    setPage(DEFAULT_PAGE_INDEX);
+    setPage(newPage - 1);
   };
 
   const rowClickHandler = (id: string) => {
@@ -77,19 +70,23 @@ const UsersTable: React.FC = () => {
       justifyContent='center'
       alignItems='center'
     >
-      <Grid item xs={8}>
-        <TablePagination
-          rowsPerPageOptions={ROWS_SELECT_PAGINATION}
-          component='div'
-          count={pageQty}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Grid>
-      <Grid item xs={8} alignSelf='flex-end'>
+      <Grid
+        item
+        xs={8}
+        display='flex'
+        flexDirection='row'
+        justifyContent='space-between'
+        mt={7}
+      >
         <GenderSelect setGender={setGender} gender={gender} />
+        <Pagination
+          count={pageQty}
+          size='small'
+          page={page + 1}
+          variant='outlined'
+          shape='rounded'
+          onChange={handleChangePage}
+        />
       </Grid>
       <Grid item xs={8}>
         {isLoading ? (
@@ -102,7 +99,10 @@ const UsersTable: React.FC = () => {
               <TableHeader />
               <TableBody>
                 {selectedByGender()
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .slice(
+                    page * DEFAULT_ROWS_INDEX,
+                    page * DEFAULT_ROWS_INDEX + DEFAULT_ROWS_INDEX
+                  )
                   .map((row: IUserData) => (
                     <TableRow
                       key={row.id}

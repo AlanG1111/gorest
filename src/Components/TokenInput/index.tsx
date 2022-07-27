@@ -6,12 +6,13 @@ import { TokenContext } from "../..";
 
 const TokenInput = () => {
   const { setToken } = useContext(TokenContext);
-  const [tokenState, setTokenState] = useState<string>();
+  const [tokenState, setTokenState] = useState<string>("");
 
   const handleAuth = () => {
     if (tokenState) {
       setToken(tokenState);
       toast.success(`Token '${tokenState}' added!`);
+      setTokenState("");
     } else {
       toast.error("Add your token!");
     }
@@ -26,6 +27,7 @@ const TokenInput = () => {
       autoComplete='off'
     >
       <TextField
+        value={tokenState}
         onChange={(e) => setTokenState(e.target.value)}
         id='token_input'
         label='Token'
